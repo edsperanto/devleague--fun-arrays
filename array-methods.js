@@ -22,8 +22,7 @@ var hundredThousandairs = dataset.filter(({amount}) => amount > 100000);
 var roundedDollar = dataset
 	.map(({amount, state}) => ({amount, state}))
 	.map(elem => {
-		elem.rounded = elem.amount.toFixed();
-		elem.rounded = parseInt(elem.rounded);
+		elem.rounded = Math.round(elem.amount);
 		return elem;
 	});
 
@@ -40,13 +39,14 @@ var roundedDollar = dataset
 var roundedDime = dataset
 	.map(({amount, state}) => ({amount, state}))
 	.map(elem => {
-		elem.amount = elem.amount.toFixed(1);
-		elem.amount = parseFloat(elem.amount);
+		elem.amount = Math.round(elem.amount * 10) / 10;
 		return elem;
 	});
 
 // set sumOfBankBalances to the sum of all amounts in bankBalances
-var sumOfBankBalances = null;
+var sumOfBankBalances = Math.round(dataset
+	.map(({amount}) => amount)
+	.reduce((prev, curr) => prev + curr, 0) * 100) / 100; 
 
 /*
   set sumOfInterests to the sum of the 18.9% interest
