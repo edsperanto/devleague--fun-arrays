@@ -39,14 +39,15 @@ var roundedDollar = dataset
 var roundedDime = dataset
 	.map(({amount, state}) => ({amount, state}))
 	.map(elem => {
-		elem.amount = Math.round(elem.amount * 10) / 10;
+		elem.amount = parseFloat(elem.amount.toFixed(1));
 		return elem;
 	});
 
 // set sumOfBankBalances to the sum of all amounts in bankBalances
-var sumOfBankBalances = Math.round(dataset
+var sumOfBankBalances = parseFloat(dataset
 	.map(({amount}) => amount)
-	.reduce((prev, curr) => prev + curr, 0) * 100) / 100; 
+	.reduce((prev, curr) => prev + curr, 0)
+	.toFixed(2)); 
 
 /*
   set sumOfInterests to the sum of the 18.9% interest
@@ -63,7 +64,7 @@ var sumOfBankBalances = Math.round(dataset
 var intStates = ['WI', 'IL', 'WY', 'OH', 'GA', 'DE'];
 var sumOfInterests = dataset
 	.filter(({state}) => intStates.some(inList => state === inList))
-	.reduce((prev, {amount}) => Math.round((prev + amount * 0.189) * 100) / 100, 0);
+	.reduce((prev, {amount}) => parseFloat(prev + amount * 0.189.toFixed(2)), 0);
 
 /*
   set sumOfHighInterests to the sum of the 18.9% interest
@@ -82,7 +83,7 @@ var sumOfInterests = dataset
 var stateTotal = {};
 dataset
 	.filter(({state}) => intStates.every(inList => state !== inList))
-	.map(({amount, state}) => stateTotal[state] = (stateTotal[state] | 0) + amount);
+	.map(({amount, state:s}) => stateTotal[s] = (stateTotal[s] | 0) + amount);
 
 var sumOfHighInterests = Object.keys(stateTotal)
 	.map(key => stateTotal[key] * 0.189)
@@ -97,7 +98,19 @@ sumOfHighInterests = 7935913.99;
     and the value is the sum of all amounts from that state
       the value must be rounded to the nearest cent
  */
-var stateSums = null;
+var stateSums = {};
+dataset.map(({state}) => stateSums[state] = 0);
+dataset.map(({amount, state:s}) => stateSums[s] += amount);
+Object.keys(stateSums).forEach(state => {
+	stateSums[state] = parseFloat(stateSums[state].toFixed(2));
+});
+
+/*
+stateSums = stateTotal;
+dataset
+	.filter(({state}) => intStates.some(inList => state === inList))
+	.map(({amount, state}) => stateSums[state] = (stateTotal[state] | 0) + amount);
+*/
 
 /*
   set lowerSumStates to an array containing
