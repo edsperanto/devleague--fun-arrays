@@ -1,11 +1,11 @@
-var dataset = require('./dataset.json');
+var dataset = require('./dataset.json').bankBalances;
 
 /*
   create an array with accounts from bankBalances that are
   greater than 100000.00
   assign the resulting array to `hundredThousandairs`
 */
-var hundredThousandairs = null;
+var hundredThousandairs = dataset.filter(elem => elem.amount > 100000);
 
 /*
   set a new key for each object in bankBalances named `rounded`
