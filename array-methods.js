@@ -20,9 +20,7 @@ var hundredThousandairs = dataset.filter(({amount}) => amount > 100000);
   assign the resulting array to `roundedDollar`
 */
 var roundedDollar = dataset
-	.map(elem => {
-		return {amount: elem.amount, state: elem.state}
-	})
+	.map(({amount, state}) => ({amount, state}))
 	.map(elem => {
 		elem.rounded = elem.amount.toFixed();
 		elem.rounded = parseInt(elem.rounded);
