@@ -1,4 +1,5 @@
 var dataset = require('./dataset.json').bankBalances;
+dataset.forEach(elem => elem.amount = parseFloat(elem.amount));
 
 /*
   create an array with accounts from bankBalances that are
@@ -18,7 +19,12 @@ var hundredThousandairs = dataset.filter(elem => elem.amount > 100000);
     }
   assign the resulting array to `roundedDollar`
 */
-var roundedDollar = null;
+var roundedDollar = dataset
+	.filter(elem => typeof elem === 'number')
+	.map(elem => {
+	elem.rounded = elem.amount.toFixed();
+	return elem;
+});
 
 /*
   set a the `amount` value for each object in bankBalances
