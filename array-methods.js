@@ -39,15 +39,14 @@ var roundedDollar = dataset
 var roundedDime = dataset
 	.map(({amount, state}) => ({amount, state}))
 	.map(elem => {
-		elem.amount = parseFloat(elem.amount.toFixed(1));
+		elem.amount = Math.round(elem.amount * 10) / 10;
 		return elem;
 	});
 
 // set sumOfBankBalances to the sum of all amounts in bankBalances
-var sumOfBankBalances = parseFloat(dataset
+var sumOfBankBalances = Math.round(dataset
 	.map(({amount}) => amount)
-	.reduce((prev, curr) => prev + curr, 0)
-	.toFixed(2)); 
+	.reduce((prev, curr) => prev + curr, 0) * 100) / 100; 
 
 /*
   set sumOfInterests to the sum of the 18.9% interest
@@ -64,7 +63,7 @@ var sumOfBankBalances = parseFloat(dataset
 var intStates = ['WI', 'IL', 'WY', 'OH', 'GA', 'DE'];
 var sumOfInterests = dataset
 	.filter(({state}) => intStates.some(inList => state === inList))
-	.reduce((prev, {amount}) => parseFloat(prev + amount * 0.189.toFixed(2)), 0);
+	.reduce((prev, {amount}) => Math.round((prev + amount * 0.189) * 100) / 100, 0);
 
 /*
   set sumOfHighInterests to the sum of the 18.9% interest
@@ -83,7 +82,7 @@ var sumOfInterests = dataset
 var stateTotal = {};
 dataset
 	.filter(({state}) => intStates.every(inList => state !== inList))
-	.map(({amount, state:s}) => stateTotal[s] = (stateTotal[s] | 0) + amount);
+	.map(({amount, state}) => stateTotal[state] = (stateTotal[state] | 0) + amount);
 
 var sumOfHighInterests = Object.keys(stateTotal)
 	.map(key => stateTotal[key] * 0.189)
