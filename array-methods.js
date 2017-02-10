@@ -6,7 +6,7 @@ dataset.forEach(elem => elem.amount = parseFloat(elem.amount));
   greater than 100000.00
   assign the resulting array to `hundredThousandairs`
 */
-var hundredThousandairs = dataset.filter(elem => elem.amount > 100000);
+var hundredThousandairs = dataset.filter(({amount}) => amount > 100000);
 
 /*
   set a new key for each object in bankBalances named `rounded`
@@ -19,10 +19,9 @@ var hundredThousandairs = dataset.filter(elem => elem.amount > 100000);
     }
   assign the resulting array to `roundedDollar`
 */
-var roundedDollar = dataset
-	.filter(elem => typeof elem === 'number')
-	.map(elem => {
+var roundedDollar = dataset.map(elem => {
 	elem.rounded = elem.amount.toFixed();
+	elem.rounded = parseInt(elem.rounded);
 	return elem;
 });
 
