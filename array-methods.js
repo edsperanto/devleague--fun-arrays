@@ -178,7 +178,20 @@ var higherStateSums = dataset
     Delaware
   false otherwise
  */
-var areStatesInHigherStateSum = null;
+var areStatesInHigherStateSum = dataset
+	.filter(({state}) => intStates.some(inList => state === inList))
+	.reduce((prev, {amount, state}) => {
+		if(prev.some(({st}) => st === state)) {
+			return prev.map(prev => {
+				if(prev.st === state) prev.amt += amount;
+				return prev;
+			});
+		}else{
+			prev.push({st: state, amt: amount});
+			return prev;
+		}
+	}, [])
+	.every(({amt}) => amt > 2500000);
 
 /*
   Stretch Goal && Final Boss
