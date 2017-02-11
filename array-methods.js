@@ -191,7 +191,7 @@ var areStatesInHigherStateSum = dataset
 			return prev;
 		}
 	}, [])
-	.every(({amt}) => amt > 2500000);
+	.every(({amt}) => amt > 2550000);
 
 /*
   Stretch Goal && Final Boss
@@ -207,8 +207,20 @@ var areStatesInHigherStateSum = dataset
     Delaware
   false otherwise
  */
-var anyStatesInHigherStateSum = null;
-
+var anyStatesInHigherStateSum = dataset
+	.filter(({state}) => intStates.some(inList => state === inList))
+	.reduce((prev, {amount, state}) => {
+		if(prev.some(({st}) => st === state)) {
+			return prev.map(prev => {
+				if(prev.st === state) prev.amt += amount;
+				return prev;
+			});
+		}else{
+			prev.push({st: state, amt: amount});
+			return prev;
+		}
+	}, [])
+	.some(({amt}) => amt > 2550000);
 
 module.exports = {
   hundredThousandairs : hundredThousandairs,
