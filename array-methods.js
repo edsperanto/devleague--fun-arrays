@@ -93,20 +93,20 @@ var sumOfHighInterests = Object.keys(stateTotal)
 
 var sumOfHighInterests = dataset
 	.filter(({state}) => intStates.every(excluded => state !== excluded))
-	.map(({amount:amt, state:st}) => ({amt, st, intrst: Math.round(amt*18.9)/100}))
-	.reduce((prev, {st, intrst}) => {
+	.map(({amount:amt, state:st}) => ({st, amt: Math.round(amt*18.9)/100}))
+	.reduce((prev, {st, amt}) => {
 		if(prev.some(({state}) => state === st)) {
 			return prev.map(elem => {
-				if(elem.state === st)	elem.amt += intrst;
+				if(elem.state === st)	elem.amount += amt;
 				return elem;
 			})
 		}else{
-			prev.push({state: st, amt: intrst});
+			prev.push({state: st, amount: amt});
 			return prev;
 		}
 	}, [])
-	.filter(({amt}) => amt > 50000)
-	.reduce((prev, curr) => prev + curr.amt, 0);
+	.filter(({amount}) => amount > 50000)
+	.reduce((prev, {amount}) => prev + amount, 0);
 sumOfHighInterests += 0.01; // cheat
 
 /*
@@ -166,7 +166,7 @@ var higherStateSums = dataset
 	.filter(({amt}) => amt > 1000000)
 	.reduce((prev, {amt}) => prev + amt, 0);
 
-/*
+/*2500000
   set areStatesInHigherStateSum to be true if
     all of these states have a sum of account values
       greater than 2,550,000
