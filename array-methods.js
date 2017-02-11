@@ -151,7 +151,20 @@ var lowerSumStates = dataset
     where the sum of amounts in the state is
       greater than 1,000,000
  */
-var higherStateSums = null;
+var higherStateSums = dataset
+	.reduce((prev, {amount, state}) => {
+		if(prev.some(({st}) => st === state)) {
+			return prev.map(prev => {
+				if(prev.st === state) prev.amt += amount;
+				return prev;
+			});
+		}else{
+			prev.push({st: state, amt: amount});
+			return prev;
+		}
+	}, [])
+	.filter(({amt}) => amt > 1000000)
+	.reduce((prev, {amt}) => prev + amt, 0);
 
 /*
   set areStatesInHigherStateSum to be true if
