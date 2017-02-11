@@ -97,16 +97,16 @@ var sumOfHighInterests = dataset
 	.reduce((prev, {st, amt}) => {
 		if(prev.some(({state}) => state === st)) {
 			return prev.map(elem => {
-				if(elem.state === st)	elem.amount += amt;
+				if(elem.state === st)	elem.total += amt;
 				return elem;
 			})
 		}else{
-			prev.push({state: st, amount: amt});
+			prev.push({state: st, total: amt});
 			return prev;
 		}
 	}, [])
-	.filter(({amount}) => amount > 50000)
-	.reduce((prev, {amount}) => prev + amount, 0);
+	.filter(({total}) => total > 50000)
+	.reduce((prev, {total}) => prev + total, 0);
 sumOfHighInterests += 0.01; // cheat
 
 /*
