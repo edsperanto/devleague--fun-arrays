@@ -94,16 +94,14 @@ var sumOfHighInterests = Object.keys(stateTotal)
 var sumOfHighInterests = dataset
 	.filter(({state}) => intStates.every(excluded => state !== excluded))
 	.map(({amount:amt, state:st}) => ({amt, st, intrst: Math.round(amt*18.9)/100}))
-	.reduce((prev, curr) => {
-		if(prev.some(({st}) => st === curr.st)) {
+	.reduce((prev, {st, intrst}) => {
+		if(prev.some(({state}) => state === st)) {
 			return prev.map(elem => {
-				if(elem.st === curr.st) {
-					elem.amt += curr.intrst;
-				}
+				if(elem.state === st)	elem.amt += intrst;
 				return elem;
 			})
 		}else{
-			prev.push({st: curr.st, amt: curr.intrst});
+			prev.push({state: st, amt: intrst});
 			return prev;
 		}
 	}, [])
