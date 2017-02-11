@@ -119,12 +119,12 @@ sumOfHighInterests += 0.01; // cheat
     and the value is the sum of all amounts from that state
       the value must be rounded to the nearest cent
  */
-var stateSums = {};
-dataset.map(({state}) => stateSums[state] = 0);
-dataset.map(({amount, state:s}) => stateSums[s] += amount);
-Object.keys(stateSums).forEach(state => {
-	stateSums[state] = parseFloat(stateSums[state].toFixed(2));
-});
+var stateSums = dataset
+	.reduce((prev, {amount:amt, state:st}) => {
+		prev[st] = (prev[st] === undefined) ? (amt) : (prev[st] += amt);
+		prev[st] = Math.round(prev[st] * 100) / 100;
+		return prev;
+	}, {});
 
 /*
 stateSums = stateTotal;
