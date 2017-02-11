@@ -127,19 +127,25 @@ var stateSums = dataset
 	}, {});
 
 /*
-stateSums = stateTotal;
-dataset
-	.filter(({state}) => intStates.some(inList => state === inList))
-	.map(({amount, state}) => stateSums[state] = (stateTotal[state] | 0) + amount);
-*/
-
-/*
   set lowerSumStates to an array containing
   only the two letter state abbreviation of each state 
   where the sum of amounts in the state is
     less than 1,000,000
  */
-var lowerSumStates = null;
+var lowerSumStates = dataset
+	.reduce((prev, {amount, state}) => {
+		if(prev.some(({st}) => st === state)) {
+			return prev.map(prev => {
+				if(prev.st === state) prev.amt += amount;
+				return prev;
+			});
+		}else{
+			prev.push({st: state, amt: amount});
+			return prev;
+		}
+	}, [])
+	.filter(({amt}) => amt < 1000000)
+	.map(({st}) => st);
 
 /*
   set higherStateSums to be the sum of 
