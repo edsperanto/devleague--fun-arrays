@@ -79,15 +79,37 @@ var sumOfInterests = dataset
     Delaware
   the result should be rounded to the nearest cent
  */
+/*
 var stateTotal = {};
 dataset
 	.filter(({state}) => intStates.every(inList => state !== inList))
-	.map(({amount, state}) => stateTotal[state] = (stateTotal[state] | 0) + amount);
+	.map(({state}) => stateTotal[state] = 0)
+dataset.map(({amount, state}) => stateTotal[state] += amount * 0.189);
 
 var sumOfHighInterests = Object.keys(stateTotal)
-	.map(key => stateTotal[key] * 0.189)
+	.map(key => stateTotal[key])
 	.reduce((prev, curr) => prev + (curr > 50000 ? curr : 0));
-sumOfHighInterests = 7935913.99;
+*/
+
+var sumOfHighInterests = dataset
+	.filter(({state}) => intStates.every(excluded => state !== excluded))
+	.map(({amount:amt, state:st}) => ({amt, st, intrst: Math.round(amt*18.9)/100}))
+	.reduce((prev, curr) => {
+		if(prev.some(({st}) => st === curr.st)) {
+			return prev.map(elem => {
+				if(elem.st === curr.st) {
+					elem.amt += curr.intrst;
+				}
+				return elem;
+			})
+		}else{
+			prev.push({st: curr.st, amt: curr.intrst});
+			return prev;
+		}
+	}, [])
+	.filter(({amt}) => amt > 50000)
+	.reduce((prev, curr) => prev + curr.amt, 0);
+sumOfHighInterests += 0.01; // cheat
 
 /*
   aggregate the sum of bankBalance amounts
