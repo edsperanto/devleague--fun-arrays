@@ -19,12 +19,7 @@ var hundredThousandairs = dataset.filter(({amount}) => amount > 100000);
     }
   assign the resulting array to `roundedDollar`
 */
-var roundedDollar = dataset
-	.map(({amount, state}) => ({amount, state}))
-	.map(elem => {
-		elem.rounded = Math.round(elem.amount);
-		return elem;
-	});
+var roundedDollar = dataset.map(({amount, state}) => ({amount, state, rounded: Math.round(amount)}));
 
 /*
   set a the `amount` value for each object in bankBalances
@@ -36,12 +31,7 @@ var roundedDollar = dataset
     }
   assign the resulting array to `roundedDime`
 */
-var roundedDime = dataset
-	.map(({amount, state}) => ({amount, state}))
-	.map(elem => {
-		elem.amount = Math.round(elem.amount * 10) / 10;
-		return elem;
-	});
+var roundedDime = dataset.map(({amount, state}) => ({amount: Math.round(amount*10)/10, state}));
 
 // set sumOfBankBalances to the sum of all amounts in bankBalances
 var sumOfBankBalances = Math.round(dataset
