@@ -34,9 +34,7 @@ var roundedDollar = dataset.map(({amount, state}) => ({amount, state, rounded: M
 var roundedDime = dataset.map(({amount, state}) => ({amount: Math.round(amount*10)/10, state}));
 
 // set sumOfBankBalances to the sum of all amounts in bankBalances
-var sumOfBankBalances = Math.round(dataset
-	.map(({amount}) => amount)
-	.reduce((prev, curr) => prev + curr, 0) * 100) / 100; 
+var sumOfBankBalances = Math.round(dataset.reduce((prev, {amount}) => prev + amount, 0) * 100) / 100; 
 
 /*
   set sumOfInterests to the sum of the 18.9% interest
@@ -69,17 +67,6 @@ var sumOfInterests = dataset
     Delaware
   the result should be rounded to the nearest cent
  */
-/*
-var stateTotal = {};
-dataset
-	.filter(({state}) => intStates.every(inList => state !== inList))
-	.map(({state}) => stateTotal[state] = 0)
-dataset.map(({amount, state}) => stateTotal[state] += amount * 0.189);
-
-var sumOfHighInterests = Object.keys(stateTotal)
-	.map(key => stateTotal[key])
-	.reduce((prev, curr) => prev + (curr > 50000 ? curr : 0));
-*/
 
 var sumOfHighInterests = dataset
 	.filter(({state}) => intStates.every(excluded => state !== excluded))
